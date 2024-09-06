@@ -40,6 +40,7 @@ namespace CodeYouApplicationTests
         public IWebElement LGBTQDropdown => _driver.FindElement(By.Id("tfa_1255"));
         public IWebElement DisabilityDropdown => _driver.FindElement(By.Id("tfa_1065"));
         public IWebElement EmploymentStatusDropdown => _driver.FindElement(By.Id("tfa_105"));
+        public IWebElement DetailedUnemploymentStatusDropdown => _driver.FindElement(By.Id("tfa_785"));
         public IWebElement CurrentOrSeekingTechJobDropdown => _driver.FindElement(By.Id("tfa_97"));
         public IWebElement FelonyConvictionDropdown => _driver.FindElement(By.Id("tfa_114"));
         public IWebElement GovernmentAssistanceDropdown => _driver.FindElement(By.Id("tfa_129"));
@@ -55,34 +56,49 @@ namespace CodeYouApplicationTests
         public IWebElement AcknowledgementCheckbox => _driver.FindElement(By.Id("tfa_545"));
         public IWebElement SubmitButton => _driver.FindElement(By.Id("submit_button"));
 
-        public string GetExpectedErrorAlertText(int expectedErrorCount) => $"The form is not complete and has not " +
-                        $"been submitted yet. There are {expectedErrorCount} problems with your submission.";
+        // Error Selectors
+        public IWebElement BirthdateError => _driver.FindElement(By.Id("tfa_5-HH"));
 
-        public Applicant CompleteApplicant => new Applicant
+        // Expected Error Values
+        public string GetExpectedFormSubmissionErrorAlertText(int expectedErrorCount) => $"The form is not complete and has not " +
+                        $"been submitted yet. There are {expectedErrorCount} problems with your submission.";
+        public string GetTooYoungErrorAlertText()
         {
-            Email = "tester_king_marlon@testinggrounds.com",
-            FirstName = "Marlon",
-            LastName = "Testerino",
-            PreferredName = "Moze",
-            PhoneNumber = "555-123-9876",
-            BirthDate = DateTime.Parse("12/13/2001"),
-            StreetAddress = "8324 Wiley Ave",
-            City = "Tester Town",
-            State = "IN",
-            ZipCode = "33219",
-            County = "Crawford",
-            Gender = "Male",
-            Race = ["Black or African American", "White"],
-            FluentInEnglish = true,
-            AuthorizedToWorkInTheUS = true,
-            VeteranStatus = false,
-            HasDisability = true,
-            IdentifiesAsLGBTQ = true,
-            EmploymentStatus = "Unemployed, actively seeking work",
-            SeekingTechEmployment = TechEmploymentStatus.ExploringOptions,
-            FelonyConviction = false,
-            QualifiesForGovernmentAssistance = true,
-            GovernmentAssistanceTypes = new Dictionary<string, bool>
+            var oldestValidBirthdate = DateTime.Now.AddYears(-99).ToString("MM/dd/yyyy");
+            var youngestValidBirthdate = DateTime.Now.AddYears(-18).ToString("MM/dd/yyyy");
+            return $"This date must be between {oldestValidBirthdate} - {youngestValidBirthdate}.";
+        }
+
+        public string ExpectedInvalidDateErrorText => "This does not appear to be a valid date.";
+
+
+        public IList<Applicant> Applicants => [
+            new Applicant
+            {
+                Email = "tester_king_marlon@testinggrounds.com",
+                FirstName = "Marlon",
+                LastName = "Testerino",
+                PreferredName = "Moze",
+                PhoneNumber = "555-123-9876",
+                BirthDate = DateTime.Parse("12/13/2001"),
+                StreetAddress = "8324 Wiley Ave",
+                City = "Tester Town",
+                State = "IN",
+                ZipCode = "33219",
+                County = "Crawford",
+                Gender = "Male",
+                Race = ["Black or African American"],
+                FluentInEnglish = true,
+                AuthorizedToWorkInTheUS = true,
+                VeteranStatus = false,
+                HasDisability = true,
+                IdentifiesAsLGBTQ = true,
+                EmploymentStatus = "Unemployed, actively seeking work",
+                UnemploymentStatus = "Long Term Unemployed (26+ weeks)",
+                SeekingTechEmployment = TechEmploymentStatus.ExploringOptions,
+                FelonyConviction = false,
+                QualifiesForGovernmentAssistance = true,
+                GovernmentAssistanceTypes = new Dictionary<string, bool>
             {
                 { "SNAP", true },
                 { "Unemployment Insurance", false },
@@ -90,46 +106,46 @@ namespace CodeYouApplicationTests
                 { "TANF", false },
                 { "SSI", true },
             },
-            HousingSituation = HousingType.FamilyOrFriend,
-            HighestEducationCompleted = "GED",
-            EnrolledInCollege = false,
-            SubstanceAbuseHistory = true,
-            OwnLaptopOrDesktop = false,
-            HasStableInternetAccess = true,
-            ComputerSkillLevel = 2,
-            WillCommitRecommendedHours = true
-        };
-
-        public Applicant RequiredFieldsOnlyApplicant => new Applicant
-        {
-            Email = "jenny.tester@testinggrounds.com",
-            FirstName = "Jenny",
-            LastName = "Tester",
-            PhoneNumber = "555-555-1234",
-            BirthDate = DateTime.Parse("03/21/1998"),
-            StreetAddress = "1620 N Main",
-            City = "Dullsville",
-            State = "KY",
-            ZipCode = "33219",
-            County = "Bell",
-            Gender = "Female",
-            Race = ["White", "Asian"],
-            FluentInEnglish = true,
-            AuthorizedToWorkInTheUS = true,
-            VeteranStatus = true,
-            HasDisability = false,
-            EmploymentStatus = "Employed full-time",
-            SeekingTechEmployment = TechEmploymentStatus.SeekingTechJob,
-            QualifiesForGovernmentAssistance = false,
-            HousingSituation = HousingType.Own,
-            HighestEducationCompleted = "Bachelor’s Degree",
-            EnrolledInCollege = false,
-            SubstanceAbuseHistory = false,
-            OwnLaptopOrDesktop = true,
-            HasStableInternetAccess = true,
-            ComputerSkillLevel = 5,
-            WillCommitRecommendedHours = true
-        };
+                HousingSituation = HousingType.FamilyOrFriend,
+                HighestEducationCompleted = "GED",
+                EnrolledInCollege = false,
+                SubstanceAbuseHistory = true,
+                OwnLaptopOrDesktop = false,
+                HasStableInternetAccess = true,
+                ComputerSkillLevel = 2,
+                WillCommitRecommendedHours = true
+            },
+            new Applicant
+            {
+                Email = "jenny.tester@testinggrounds.com",
+                FirstName = "Jenny",
+                LastName = "Tester",
+                PhoneNumber = "555-555-1234",
+                BirthDate = DateTime.Parse("03/21/1998"),
+                StreetAddress = "1620 N Main",
+                City = "Dullsville",
+                State = "KY",
+                ZipCode = "33219",
+                County = "Bell",
+                Gender = "Female",
+                Race = ["White", "Asian"],
+                FluentInEnglish = true,
+                AuthorizedToWorkInTheUS = true,
+                VeteranStatus = true,
+                HasDisability = false,
+                EmploymentStatus = "Employed full-time",
+                SeekingTechEmployment = TechEmploymentStatus.SeekingTechJob,
+                QualifiesForGovernmentAssistance = false,
+                HousingSituation = HousingType.Own,
+                HighestEducationCompleted = "Bachelor’s Degree",
+                EnrolledInCollege = false,
+                SubstanceAbuseHistory = false,
+                OwnLaptopOrDesktop = true,
+                HasStableInternetAccess = true,
+                ComputerSkillLevel = 5,
+                WillCommitRecommendedHours = true
+            },
+        ];
 
         public void FillAllFieldsAs(Applicant applicant)
         {
@@ -139,6 +155,19 @@ namespace CodeYouApplicationTests
 
         public void FillRequiredFieldsAs(Applicant applicant)
         {
+            FillTextFields(applicant);
+            SelectDropdownItems(applicant);
+            SelectCheckboxesAndRadioButtons(applicant);
+        }
+
+        public void SubmitApplication()
+        {
+            _seleniumHelpers.ScrollToElement(SubmitButton);
+            SubmitButton.Click();
+        }
+
+        private void FillTextFields(Applicant applicant)
+        {
             EmailTextbox.SendKeys(applicant.Email);
             FirstNameTextbox.SendKeys(applicant.FirstName);
             LastNameTextbox.SendKeys(applicant.LastName);
@@ -146,26 +175,34 @@ namespace CodeYouApplicationTests
             BirthDateTextbox.SendKeys(applicant.BirthDate.ToString("MM/dd/yyyy"));
             StreetTextbox.SendKeys(applicant.StreetAddress);
             CityTextbox.SendKeys(applicant.City);
-            _seleniumHelpers.ScrollToElement(StateDropdown);
-            _seleniumHelpers.SelectDropdownItemWithText(StateDropdown, applicant.State);
             ZipCodeTextbox.SendKeys(applicant.ZipCode);
-            _seleniumHelpers.SelectDropdownItemWithText(CountyDropdown, applicant.County);
-            _seleniumHelpers.SelectDropdownItemWithText(GenderDropdown, applicant.Gender);
 
-            _seleniumHelpers.ScrollToElement(RaceCheckboxes);
-            foreach (var race in applicant.Race)
-            {
-                _seleniumHelpers.SelectInputWithText(RaceCheckboxes, race);
-            }
+        }
 
+        private void SelectDropdownItems(Applicant applicant)
+        {
+            _seleniumHelpers.SelectDropdownItemWithText(StateDropdown,
+                applicant.State);
+            _seleniumHelpers.SelectDropdownItemWithText(CountyDropdown,
+                applicant.County);
+            _seleniumHelpers.SelectDropdownItemWithText(GenderDropdown,
+                applicant.Gender);
             _seleniumHelpers.SelectDropdownItemWithText(FluentInEnglishDropdown,
                 BoolToYesNo(applicant.FluentInEnglish));
             _seleniumHelpers.SelectDropdownItemWithText(WorkAuthorizationDropdown,
                 BoolToYesNo(applicant.AuthorizedToWorkInTheUS));
             _seleniumHelpers.SelectDropdownItemWithText(VeteranStatusDropdown,
                 BoolToYesNo(applicant.VeteranStatus));
-            _seleniumHelpers.SelectDropdownItemWithText(DisabilityDropdown, BoolToYesNo(applicant.HasDisability));
+            _seleniumHelpers.SelectDropdownItemWithText(DisabilityDropdown,
+                BoolToYesNo(applicant.HasDisability));
             _seleniumHelpers.SelectDropdownItemWithText(EmploymentStatusDropdown, applicant.EmploymentStatus);
+
+            if (DetailedUnemploymentStatusDropdown.Displayed)
+            {
+                _seleniumHelpers.SelectDropdownItemWithText(DetailedUnemploymentStatusDropdown,
+                    applicant.UnemploymentStatus);
+            }
+
             _seleniumHelpers.SelectDropdownItemWithText(CurrentOrSeekingTechJobDropdown,
                 EmploymentStatusToString(applicant.SeekingTechEmployment));
             _seleniumHelpers.SelectDropdownItemWithText(GovernmentAssistanceDropdown,
@@ -173,8 +210,8 @@ namespace CodeYouApplicationTests
             _seleniumHelpers.SelectDropdownItemWithText(HousingSituationDropdown,
                 HousingTypeToString(applicant.HousingSituation));
 
-            _seleniumHelpers.ScrollToElement(EducationLevelDropdown);
-            _seleniumHelpers.SelectDropdownItemWithText(EducationLevelDropdown, applicant.HighestEducationCompleted);
+            _seleniumHelpers.SelectDropdownItemWithText(EducationLevelDropdown,
+                applicant.HighestEducationCompleted);
             _seleniumHelpers.SelectDropdownItemWithText(CollegeOrDegreePursuitDropdown,
                 BoolToYesNo(applicant.EnrolledInCollege));
             _seleniumHelpers.SelectDropdownItemWithText(SubstanceAbuseDropdown,
@@ -183,18 +220,18 @@ namespace CodeYouApplicationTests
                 BoolToYesNo(applicant.OwnLaptopOrDesktop));
             _seleniumHelpers.SelectDropdownItemWithText(StableInternetDropdown,
                 BoolToYesNo(applicant.HasStableInternetAccess));
-
-            _seleniumHelpers.ScrollToElement(ComputerSkillRadioButtons);
-            _seleniumHelpers.SelectInputWithText(ComputerSkillRadioButtons,
-                applicant.ComputerSkillLevel.ToString());
             _seleniumHelpers.SelectDropdownItemWithText(TimeCommitmentDropdown,
                 BoolToYesNo(applicant.WillCommitRecommendedHours));
         }
 
-        public void SubmitApplication()
+        private void SelectCheckboxesAndRadioButtons(Applicant applicant)
         {
-            _seleniumHelpers.ScrollToElement(SubmitButton);
-            SubmitButton.Click();
+            foreach (var race in applicant.Race)
+            {
+                _seleniumHelpers.SelectInputWithText(RaceCheckboxes, race);
+            }
+            _seleniumHelpers.SelectInputWithText(ComputerSkillRadioButtons,
+                applicant.ComputerSkillLevel.ToString());
         }
 
         private void FillOptionalFieldsAs(Applicant applicant)
@@ -204,7 +241,6 @@ namespace CodeYouApplicationTests
                 BoolToYesNo(applicant.IdentifiesAsLGBTQ));
             _seleniumHelpers.SelectInputWithText(FelonyConvictionDropdown,
                 BoolToYesNo(applicant.FelonyConviction));
-
         }
 
         private static string BoolToYesNo(bool input)

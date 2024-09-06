@@ -17,6 +17,7 @@
             Gender = "Male";
             Race = ["White"];
             EmploymentStatus = "Employed full-time";
+            UnemploymentStatus = "Student";
             HighestEducationCompleted = "GED";
 
         }
@@ -40,6 +41,7 @@
         public bool IdentifiesAsLGBTQ { get; set; }
         public bool HasDisability { get; set; }
         public string EmploymentStatus { get; set; }
+        public string UnemploymentStatus { get; set; }
         public TechEmploymentStatus SeekingTechEmployment { get; set; }
         public bool FelonyConviction { get; set; }
         public bool QualifiesForGovernmentAssistance { get; set; }

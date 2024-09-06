@@ -1,5 +1,6 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions;
 
 namespace CodeYouApplicationTests
 {
@@ -8,12 +9,14 @@ namespace CodeYouApplicationTests
         private IWebDriver _driver;
         private ApplyPage _applyPage;
         private SeleniumHelpers _seleniumHelpers;
+        private Actions _actionsPerformer;
 
         [SetUp]
         public void Setup()
         {
             _driver = new ChromeDriver();
-            _seleniumHelpers = new SeleniumHelpers(_driver);
+            _actionsPerformer = new Actions(_driver);
+            _seleniumHelpers = new SeleniumHelpers(_driver, _actionsPerformer);
             _applyPage = new ApplyPage(_driver, _seleniumHelpers);
         }
 
@@ -30,10 +33,11 @@ namespace CodeYouApplicationTests
         {
             _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
 
-            _applyPage.FillRequiredFieldsAs(_applyPage.RequiredFieldsOnlyApplicant);
-            //_applyPage.AcknowledgementCheckbox.Click();
+            _applyPage.FillRequiredFieldsAs(_applyPage.Applicants[0]);
+            _seleniumHelpers.ScrollToElement(_applyPage.AcknowledgementCheckbox);
+            _applyPage.AcknowledgementCheckbox.Click();
 
-            _applyPage.SubmitApplication();
+            //_applyPage.SubmitApplication();
         }
 
         [TearDown]
