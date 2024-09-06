@@ -12,6 +12,9 @@ namespace CodeYouApplicationTests
         }
 
         public string Url => "https://code-you.org/apply/";
+        public string ExpectedIntroText => "Please use this form to sign-up for Code:You. Applicants will be sent pre-work for the course on a rolling basis until spots are filled. Please note we have a considerable waiting list to get into the program – it could be many months (even a year or more) before your spot comes up in line.\r\n\r\nApplicants will be contacted to complete the necessary pre-work for the upcoming course a month or two before the class is slated to begin. Please check your email and be sure to whitelist info@code-you.org to receive periodic updates from our team.\r\n  \r\nIMPORTANT NOTE: Due to overwhelming interest in the program, we have a very long waiting list to get into the program. Sometimes a year or even more. Please be patient, but in the meantime you are welcome to contact info@code-you.org for any questions.";
+
+        // Field Selectors
         public IWebElement IntroText => _driver.FindElement(By.Id("tfa_525-HTML"));
         public IWebElement EmailTextbox => _driver.FindElement(By.Id("tfa_215"));
         public IWebElement FirstNameTextbox => _driver.FindElement(By.Id("tfa_2"));
@@ -22,11 +25,11 @@ namespace CodeYouApplicationTests
         public IWebElement StreetTextbox => _driver.FindElement(By.Id("tfa_6"));
         public IWebElement CityTextbox => _driver.FindElement(By.Id("tfa_7"));
         public IWebElement StateDropdown => _driver.FindElement(By.Id("tfa_220"));
+        public IWebElement ZipCodeTextbox => _driver.FindElement(By.Id("tfa_9"));
+        public IWebElement CountyDropdown => _driver.FindElement(By.Id("tfa_59"));
         public IWebElement IndianaCountiesGroup => _driver.FindElement(By.Id("tfa_663"));
         public IWebElement KentuckyCountiesGroup => _driver.FindElement(By.Id("tfa_666"));
         public IWebElement OhioCountiesGroup => _driver.FindElement(By.Id("tfa_684"));
-        public IWebElement ZipCodeTextbox => _driver.FindElement(By.Id("tfa_9"));
-        public IWebElement CountyDropdown => _driver.FindElement(By.Id("tfa_59"));
         public IWebElement GenderDropdown => _driver.FindElement(By.Id("tfa_30"));
         public IWebElement RaceCheckboxes => _driver.FindElement(By.Id("tfa_794"));
         public IWebElement FluentInEnglishDropdown => _driver.FindElement(By.Id("tfa_30"));
