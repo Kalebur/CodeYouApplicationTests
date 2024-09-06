@@ -7,20 +7,33 @@ namespace CodeYouApplicationTests
     {
         private IWebDriver _driver;
         private ApplyPage _applyPage;
+        private SeleniumHelpers _seleniumHelpers;
 
         [SetUp]
         public void Setup()
         {
             _driver = new ChromeDriver();
-            _applyPage = new ApplyPage(_driver);
+            _seleniumHelpers = new SeleniumHelpers(_driver);
+            _applyPage = new ApplyPage(_driver, _seleniumHelpers);
         }
 
         [Test]
         public void ApplicationForm_ContainsExpectedIntroText()
         {
-            _driver.Navigate().GoToUrl(_applyPage.Url);
+            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
 
             Assert.That(_applyPage.IntroText.Text, Is.EqualTo(_applyPage.ExpectedIntroText));
+        }
+
+        [Test]
+        public void ApplicationForm_SubmitsWithoutError_WhenAllRequiredFieldsAreFilled()
+        {
+            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
+
+            _applyPage.FillRequiredFieldsAs(_applyPage.RequiredFieldsOnlyApplicant);
+            //_applyPage.AcknowledgementCheckbox.Click();
+
+            _applyPage.SubmitApplication();
         }
 
         [TearDown]
