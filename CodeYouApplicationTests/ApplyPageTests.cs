@@ -79,6 +79,29 @@ namespace CodeYouApplicationTests
             Assert.That(onlyCountiesInStateDisplayed, Is.True);
         }
 
+        [Test]
+        public void StateDropdown_ContainsOnlyStatesServedByProgram()
+        {
+            var onlyValidStatesDisplayed = true;
+
+            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
+            _seleniumHelpers.ScrollToElement(_applyPage.StateDropdown);
+            var stateChoices = _applyPage.StateDropdown
+                .FindElements(By.XPath(".//child::option"))
+                .Where(element => !element.Text.ToLower().Contains("please select"));
+
+            foreach (var stateChoice in stateChoices)
+            {
+                if (!_applyPage.ServedStates.Contains(stateChoice.Text))
+                {
+                    onlyValidStatesDisplayed = false;
+                    break;
+                }
+            }
+
+            Assert.That(onlyValidStatesDisplayed, Is.True);
+        }
+
         [TearDown]
         public void Teardown()
         {
