@@ -145,6 +145,47 @@ namespace CodeYouApplicationTests
                 ComputerSkillLevel = 5,
                 WillCommitRecommendedHours = true
             },
+            new Applicant
+            {
+                Email = "markanthony8303@testinggrounds.com",
+                FirstName = "Mark",
+                LastName = "Caldwell",
+                PreferredName = "Tony",
+                PhoneNumber = "555-111-9074",
+                BirthDate = DateTime.Parse("09/14/2003"),
+                StreetAddress = "610 Martin Ln",
+                City = "Test City",
+                State = "OH",
+                ZipCode = "80025",
+                County = "Warren",
+                Gender = "Male",
+                Race = ["White"],
+                FluentInEnglish = true,
+                AuthorizedToWorkInTheUS = true,
+                VeteranStatus = false,
+                HasDisability = true,
+                IdentifiesAsLGBTQ = false,
+                EmploymentStatus = "Unemployed, actively seeking work",
+                UnemploymentStatus = "Long Term Unemployed (26+ weeks)",
+                SeekingTechEmployment = TechEmploymentStatus.ExploringOptions,
+                QualifiesForGovernmentAssistance = true,
+                GovernmentAssistanceTypes = new Dictionary<string, bool>
+                {
+                    { "SNAP", true },
+                    { "Unemployment Insurance", true },
+                    { "Medicaid", false },
+                    { "TANF", false },
+                    { "SSI", false },
+                },
+                HousingSituation = HousingType.Own,
+                HighestEducationCompleted = "Associate’s Degree",
+                EnrolledInCollege = false,
+                SubstanceAbuseHistory = false,
+                OwnLaptopOrDesktop = true,
+                HasStableInternetAccess = true,
+                ComputerSkillLevel = 3,
+                WillCommitRecommendedHours = true
+            },
         ];
 
         public void FillAllFieldsAs(Applicant applicant)
@@ -232,6 +273,29 @@ namespace CodeYouApplicationTests
             }
             _seleniumHelpers.SelectInputWithText(ComputerSkillRadioButtons,
                 applicant.ComputerSkillLevel.ToString());
+            SelectGovernmentAssistanceTypes(applicant);
+        }
+
+        private void SelectGovernmentAssistanceTypes(Applicant applicant)
+        {
+            // Government assistance selection requires a little more work
+            // because the labels are wonky. The checkboxes have blank labels
+            // connected to them, and the labels with text aren't linked to anything
+            _seleniumHelpers.ScrollToElement(CurrentAssistanceCheckboxes);
+            var labels = CurrentAssistanceCheckboxes.FindElements(By.XPath(".//child::label"))
+                .Where(label => !string.IsNullOrWhiteSpace(label.Text))
+                .Select(label => label.Text)
+                .ToList();
+            var assistanceCheckboxes = CurrentAssistanceCheckboxes.FindElements(By.XPath(".//child::input"));
+
+            foreach (var assistanceType in applicant.GovernmentAssistanceTypes.Keys)
+            {
+                if (applicant.GovernmentAssistanceTypes[assistanceType])
+                {
+                    var index = labels.FindIndex(label => label == assistanceType);
+                    assistanceCheckboxes[index].Click();
+                }
+            }
         }
 
         private void FillOptionalFieldsAs(Applicant applicant)
