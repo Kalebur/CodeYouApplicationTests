@@ -199,7 +199,6 @@ namespace CodeYouApplicationTests
         {
             FillTextFields(applicant);
             SelectDropdownItems(applicant);
-            SelectCheckboxesAndRadioButtons(applicant);
         }
 
         public void SubmitApplication()
@@ -306,6 +305,7 @@ namespace CodeYouApplicationTests
                 BoolToYesNo(applicant.IdentifiesAsLGBTQ));
             _seleniumHelpers.SelectInputWithText(FelonyConvictionDropdown,
                 BoolToYesNo(applicant.FelonyConviction));
+            SelectCheckboxesAndRadioButtons(applicant);
         }
 
         private static string BoolToYesNo(bool input)

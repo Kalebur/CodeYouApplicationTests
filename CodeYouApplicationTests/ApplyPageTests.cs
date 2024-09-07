@@ -45,7 +45,7 @@ namespace CodeYouApplicationTests
         [TestCase("OH")]
         public void ApplicationForm_DisplaysOnlyCountiesInSelectedState(string state)
         {
-            var hiddenAsExpected = true;
+            var onlyCountiesInStateDisplayed = true;
             _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
             var hiddenCountyGroups = _applyPage.AllCountyGroups
                 .Where(group => group.GetAttribute("label") != state)
@@ -56,12 +56,12 @@ namespace CodeYouApplicationTests
             {
                 if (!hiddenCountyGroup.GetAttribute("style").Contains("none"))
                 {
-                    hiddenAsExpected = false;
+                    onlyCountiesInStateDisplayed = false;
                     break;
                 }
             }
 
-            Assert.That(hiddenAsExpected, Is.True);
+            Assert.That(onlyCountiesInStateDisplayed, Is.True);
         }
 
         [TearDown]

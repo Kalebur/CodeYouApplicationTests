@@ -29,12 +29,12 @@ namespace CodeYouApplicationTests
 
         public void SelectInputWithText(IWebElement inputGroup, string text)
         {
-            var checkboxes = inputGroup.GetAllChildrenBy(By.XPath("child::span//label"));
+            var inputItems = inputGroup.FindElements(By.XPath(".//child::span//label"));
             ScrollToElement(inputGroup);
 
-            foreach (var checkbox in checkboxes)
+            foreach (var inputItem in inputItems)
             {
-                if (checkbox.Text == text) checkbox.Click();
+                if (inputItem.Text == text) inputItem.Click();
             }
         }
     }
