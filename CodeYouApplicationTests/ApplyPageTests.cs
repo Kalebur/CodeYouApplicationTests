@@ -84,34 +84,11 @@ namespace CodeYouApplicationTests
             Assert.That(onlyCountiesInStateDisplayed, Is.True);
         }
 
-        [Test]
-        public void StateDropdown_ContainsOnlyStatesServedByProgram()
-        {
-            var onlyValidStatesDisplayed = true;
-
-            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
-            _seleniumHelpers.ScrollToElement(_applyPage.StateDropdown);
-            var stateChoices = _applyPage.StateDropdown
-                .FindElements(By.XPath(".//child::option"))
-                .Where(element => !element.Text.ToLower().Contains("please select"));
-
-            foreach (var stateChoice in stateChoices)
-            {
-                if (!_applyPage.ServedStates.Contains(stateChoice.Text))
-                {
-                    onlyValidStatesDisplayed = false;
-                    break;
-                }
-            }
-
-            Assert.That(onlyValidStatesDisplayed, Is.True);
-        }
-
         // Test Case 4
         [Test]
         public void ApplicationForm_FailsToSubmit_WhenFormIsBlank()
         {
-            var errorAlertText = string.Empty;
+            string errorAlertText;
             var expectedErrorAlertText = _applyPage.GetExpectedFormSubmissionErrorAlertText(28);
 
             _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
@@ -138,6 +115,46 @@ namespace CodeYouApplicationTests
             var errorText = _applyPage.BirthdateError.Text;
 
             Assert.That(errorText, Is.EqualTo(_applyPage.ExpectedInvalidDateErrorText));
+        }
+
+        // Test Case 6
+        [Test]
+        public void ApplicationForm_DisplaysCorrectError_WhenSubmittingBirthdateThatIsTooYoungOrTooOld()
+        {
+            var birthdate = ApplicantHelpers.GetRandomBirthDate(BirthdateType.Future);
+
+            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
+            _applyPage.BirthDateTextbox.SendKeys(birthdate.ToString("MM/dd/yyyy"));
+            _applyPage.SubmitApplication();
+            _driver.DismissAlert();
+            var expected = _applyPage.BirthdateError.Text;
+            var errorText = _applyPage.BirthdateError.Text;
+
+            Assert.That(errorText, Is.EqualTo(expected));
+        }
+
+        // Test Case 7
+        [Test]
+        public void StateDropdown_ContainsOnlyStatesServedByProgram()
+        {
+            var onlyValidStatesDisplayed = true;
+
+            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
+            _seleniumHelpers.ScrollToElement(_applyPage.StateDropdown);
+            var stateChoices = _applyPage.StateDropdown
+                .FindElements(By.XPath(".//child::option"))
+                .Where(element => !element.Text.Contains("please select", StringComparison.CurrentCultureIgnoreCase));
+
+            foreach (var stateChoice in stateChoices)
+            {
+                if (!_applyPage.ServedStates.Contains(stateChoice.Text))
+                {
+                    onlyValidStatesDisplayed = false;
+                    break;
+                }
+            }
+
+            Assert.That(onlyValidStatesDisplayed, Is.True);
         }
 
         [TearDown]

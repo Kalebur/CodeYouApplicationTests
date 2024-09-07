@@ -79,8 +79,10 @@ namespace CodeYouApplicationTests
         }
         public string GetTooYoungErrorAlertText()
         {
-            var oldestValidBirthdate = DateTime.Now.AddYears(-99).ToString("MM/dd/yyyy");
-            var youngestValidBirthdate = DateTime.Now.AddYears(-18).ToString("MM/dd/yyyy");
+            var dateFormat = "M/d/yyyy";
+            var currentDate = DateTime.Now;
+            var oldestValidBirthdate = currentDate.AddYears(-99).ToString(dateFormat);
+            var youngestValidBirthdate = currentDate.AddYears(-18).ToString(dateFormat);
             return $"This date must be between {oldestValidBirthdate} - {youngestValidBirthdate}.";
         }
 
