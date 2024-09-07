@@ -60,8 +60,22 @@ namespace CodeYouApplicationTests
         public IWebElement BirthdateError => _driver.FindElement(By.Id("tfa_5-HH"));
 
         // Expected Error Values
-        public string GetExpectedFormSubmissionErrorAlertText(int expectedErrorCount) => $"The form is not complete and has not " +
-                        $"been submitted yet. There are {expectedErrorCount} problems with your submission.";
+        public string GetExpectedFormSubmissionErrorAlertText(int expectedErrorCount)
+        {
+            string expectedErrorText;
+            if (expectedErrorCount == 1)
+            {
+                expectedErrorText = $"is {expectedErrorCount} problem";
+            }
+            else
+            {
+                expectedErrorText = $"are {expectedErrorCount} problems";
+            }
+
+            return $"The form is not complete and has not " +
+                            $"been submitted yet. There {expectedErrorText} with your submission.";
+
+        }
         public string GetTooYoungErrorAlertText()
         {
             var oldestValidBirthdate = DateTime.Now.AddYears(-99).ToString("MM/dd/yyyy");
@@ -223,46 +237,46 @@ namespace CodeYouApplicationTests
 
         private void SelectDropdownItems(Applicant applicant)
         {
-            _seleniumHelpers.SelectDropdownItemWithText(StateDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(StateDropdown,
                 applicant.State);
-            _seleniumHelpers.SelectDropdownItemWithText(CountyDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(CountyDropdown,
                 applicant.County);
-            _seleniumHelpers.SelectDropdownItemWithText(GenderDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(GenderDropdown,
                 applicant.Gender);
-            _seleniumHelpers.SelectDropdownItemWithText(FluentInEnglishDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(FluentInEnglishDropdown,
                 BoolToYesNo(applicant.FluentInEnglish));
-            _seleniumHelpers.SelectDropdownItemWithText(WorkAuthorizationDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(WorkAuthorizationDropdown,
                 BoolToYesNo(applicant.AuthorizedToWorkInTheUS));
-            _seleniumHelpers.SelectDropdownItemWithText(VeteranStatusDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(VeteranStatusDropdown,
                 BoolToYesNo(applicant.VeteranStatus));
-            _seleniumHelpers.SelectDropdownItemWithText(DisabilityDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(DisabilityDropdown,
                 BoolToYesNo(applicant.HasDisability));
-            _seleniumHelpers.SelectDropdownItemWithText(EmploymentStatusDropdown, applicant.EmploymentStatus);
+            _seleniumHelpers.SelectDropdownItemByText(EmploymentStatusDropdown, applicant.EmploymentStatus);
 
             if (DetailedUnemploymentStatusDropdown.Displayed)
             {
-                _seleniumHelpers.SelectDropdownItemWithText(DetailedUnemploymentStatusDropdown,
+                _seleniumHelpers.SelectDropdownItemByText(DetailedUnemploymentStatusDropdown,
                     applicant.UnemploymentStatus);
             }
 
-            _seleniumHelpers.SelectDropdownItemWithText(CurrentOrSeekingTechJobDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(CurrentOrSeekingTechJobDropdown,
                 EmploymentStatusToString(applicant.SeekingTechEmployment));
-            _seleniumHelpers.SelectDropdownItemWithText(GovernmentAssistanceDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(GovernmentAssistanceDropdown,
                 BoolToYesNo(applicant.QualifiesForGovernmentAssistance));
-            _seleniumHelpers.SelectDropdownItemWithText(HousingSituationDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(HousingSituationDropdown,
                 HousingTypeToString(applicant.HousingSituation));
 
-            _seleniumHelpers.SelectDropdownItemWithText(EducationLevelDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(EducationLevelDropdown,
                 applicant.HighestEducationCompleted);
-            _seleniumHelpers.SelectDropdownItemWithText(CollegeOrDegreePursuitDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(CollegeOrDegreePursuitDropdown,
                 BoolToYesNo(applicant.EnrolledInCollege));
-            _seleniumHelpers.SelectDropdownItemWithText(SubstanceAbuseDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(SubstanceAbuseDropdown,
                 BoolToYesNo(applicant.SubstanceAbuseHistory));
-            _seleniumHelpers.SelectDropdownItemWithText(LaptopOrDesktopOwnerDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(LaptopOrDesktopOwnerDropdown,
                 BoolToYesNo(applicant.OwnLaptopOrDesktop));
-            _seleniumHelpers.SelectDropdownItemWithText(StableInternetDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(StableInternetDropdown,
                 BoolToYesNo(applicant.HasStableInternetAccess));
-            _seleniumHelpers.SelectDropdownItemWithText(TimeCommitmentDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(TimeCommitmentDropdown,
                 BoolToYesNo(applicant.WillCommitRecommendedHours));
         }
 
@@ -270,9 +284,9 @@ namespace CodeYouApplicationTests
         {
             foreach (var race in applicant.Race)
             {
-                _seleniumHelpers.SelectInputWithText(RaceCheckboxes, race);
+                _seleniumHelpers.SelectInputByText(RaceCheckboxes, race);
             }
-            _seleniumHelpers.SelectInputWithText(ComputerSkillRadioButtons,
+            _seleniumHelpers.SelectInputByText(ComputerSkillRadioButtons,
                 applicant.ComputerSkillLevel.ToString());
         }
 
@@ -301,9 +315,9 @@ namespace CodeYouApplicationTests
         private void FillOptionalFieldsAs(Applicant applicant)
         {
             PreferredNameTextbox.SendKeys(applicant.PreferredName);
-            _seleniumHelpers.SelectDropdownItemWithText(LGBTQDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(LGBTQDropdown,
                 BoolToYesNo(applicant.IdentifiesAsLGBTQ));
-            _seleniumHelpers.SelectDropdownItemWithText(FelonyConvictionDropdown,
+            _seleniumHelpers.SelectDropdownItemByText(FelonyConvictionDropdown,
                 BoolToYesNo(applicant.FelonyConviction));
             if (applicant.QualifiesForGovernmentAssistance)
             {

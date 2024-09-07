@@ -31,13 +31,16 @@ namespace CodeYouApplicationTests
         [Test]
         public void ApplicationForm_SubmitsWithoutError_WhenAllRequiredFieldsAreFilled()
         {
+            var expectedErrorText = _applyPage.GetExpectedFormSubmissionErrorAlertText(1);
+
             _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
-
             _applyPage.FillRequiredFieldsAs(_applyPage.Applicants[0]);
-            _seleniumHelpers.ScrollToElement(_applyPage.AcknowledgementCheckbox);
-            _applyPage.AcknowledgementCheckbox.Click();
+            //_seleniumHelpers.ScrollToElement(_applyPage.AcknowledgementCheckbox);
+            //_applyPage.AcknowledgementCheckbox.Click();
+            _applyPage.SubmitApplication();
+            var alertText = _driver.GetAlertText();
 
-            //_applyPage.SubmitApplication();
+            Assert.That(alertText, Is.EqualTo(expectedErrorText));
         }
         
         [Test]
@@ -63,7 +66,7 @@ namespace CodeYouApplicationTests
                 .Where(group => group.GetAttribute("label") != state)
                 .ToList();
 
-            _seleniumHelpers.SelectDropdownItemWithText(_applyPage.StateDropdown, state);
+            _seleniumHelpers.SelectDropdownItemByText(_applyPage.StateDropdown, state);
             foreach (var hiddenCountyGroup in hiddenCountyGroups)
             {
                 if (!hiddenCountyGroup.GetAttribute("style").Contains("none"))

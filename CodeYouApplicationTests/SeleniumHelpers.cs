@@ -15,7 +15,7 @@ namespace CodeYouApplicationTests
             _actionsPerformer = actionsPerformer;
         }
 
-        public void SelectDropdownItemWithText(IWebElement dropdown, string text)
+        public void SelectDropdownItemByText(IWebElement dropdown, string text)
         {
             var selectDropdown = new SelectElement(dropdown);
             ScrollToElement(dropdown);
@@ -27,7 +27,7 @@ namespace CodeYouApplicationTests
             _actionsPerformer.ScrollToElement(element).Perform();
         }
 
-        public void SelectInputWithText(IWebElement inputGroup, string text)
+        public void SelectInputByText(IWebElement inputGroup, string text)
         {
             var inputItems = inputGroup.FindElements(By.XPath(".//child::span//label"));
 
