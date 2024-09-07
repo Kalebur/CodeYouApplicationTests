@@ -33,8 +33,11 @@ namespace CodeYouApplicationTests
 
             foreach (var inputItem in inputItems)
             {
-                ScrollToElement(inputItem);
-                if (inputItem.Text == text) inputItem.Click();
+                if (inputItem.Text == text)
+                {
+                    ScrollToElement(inputItem);
+                    inputItem.Click();
+                }
             }
         }
     }

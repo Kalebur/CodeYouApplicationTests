@@ -178,7 +178,7 @@ namespace CodeYouApplicationTests
                     { "TANF", false },
                     { "SSI", false },
                 },
-                HousingSituation = HousingType.Own,
+                HousingSituation = HousingType.Rent,
                 HighestEducationCompleted = "Associate’s Degree",
                 EnrolledInCollege = false,
                 SubstanceAbuseHistory = false,
