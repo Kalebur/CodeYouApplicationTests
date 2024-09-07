@@ -29,22 +29,6 @@ namespace CodeYouApplicationTests
         }
 
         [Test]
-        public void ApplicationForm_SubmitsWithoutError_WhenAllRequiredFieldsAreFilled()
-        {
-            var expectedErrorText = _applyPage.GetExpectedFormSubmissionErrorAlertText(1);
-
-            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
-            _applyPage.FillRequiredFieldsAs(_applyPage.Applicants[0]);
-            //_seleniumHelpers.ScrollToElement(_applyPage.AcknowledgementCheckbox);
-            //_applyPage.AcknowledgementCheckbox.Click();
-            _applyPage.SubmitApplication();
-            var alertText = _driver.GetAlertText();
-            _driver.DismissAlert();
-
-            Assert.That(alertText, Is.EqualTo(expectedErrorText));
-        }
-        
-        [Test]
         public void ApplicationForm_SubmitsWithoutError_WhenAllFieldsAreFilled()
         {
             var expectedErrorText = _applyPage.GetExpectedFormSubmissionErrorAlertText(1);
@@ -175,6 +159,43 @@ namespace CodeYouApplicationTests
 
             Assert.That(selectedCount, Is.EqualTo(1));
 
+        }
+
+        // Test Case 10
+        [Test]
+        public void ApplicationForm_SubmitsWithoutError_WhenAllRequiredFieldsAreFilled()
+        {
+            var expectedErrorText = _applyPage.GetExpectedFormSubmissionErrorAlertText(1);
+
+            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
+            _applyPage.FillRequiredFieldsAs(_applyPage.Applicants[0]);
+            //_seleniumHelpers.ScrollToElement(_applyPage.AcknowledgementCheckbox);
+            //_applyPage.AcknowledgementCheckbox.Click();
+            _applyPage.SubmitApplication();
+            var alertText = _driver.GetAlertText();
+            _driver.DismissAlert();
+
+            Assert.That(alertText, Is.EqualTo(expectedErrorText));
+        }
+
+        // Test Case 11
+        [Test]
+        public void RaceCheckboxes_ClearAllOtherSelections_WhenSelectingPreferNotToSay()
+        {
+            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
+            _seleniumHelpers.ScrollToElement(_applyPage.RaceCheckboxes);
+            var raceOptions = _applyPage.RaceCheckboxes.FindElements(By.XPath(".//child::input")).ToList();
+            var optionsToCheck = raceOptions.Take(raceOptions.Count - 1);
+            foreach (var option in optionsToCheck)
+            {
+                option.Click();
+            }
+
+            // Select "Prefer Not To Say" which should clear all other selections
+            _seleniumHelpers.SelectInputByText(_applyPage.RaceCheckboxes, "Prefer Not To Say");
+            var selectedCount = _seleniumHelpers.GetCountOfSelectedElements(raceOptions);
+
+            Assert.That(selectedCount, Is.EqualTo(1));
         }
 
         [TearDown]
