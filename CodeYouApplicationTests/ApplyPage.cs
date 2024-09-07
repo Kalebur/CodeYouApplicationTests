@@ -165,7 +165,7 @@ namespace CodeYouApplicationTests
                 AuthorizedToWorkInTheUS = true,
                 VeteranStatus = false,
                 HasDisability = true,
-                IdentifiesAsLGBTQ = false,
+                IdentifiesAsLGBTQ = true,
                 EmploymentStatus = "Unemployed, actively seeking work",
                 UnemploymentStatus = "Long Term Unemployed (26+ weeks)",
                 SeekingTechEmployment = TechEmploymentStatus.ExploringOptions,
@@ -191,14 +191,15 @@ namespace CodeYouApplicationTests
 
         public void FillAllFieldsAs(Applicant applicant)
         {
-            FillOptionalFieldsAs(applicant);
             FillRequiredFieldsAs(applicant);
+            FillOptionalFieldsAs(applicant);
         }
 
         public void FillRequiredFieldsAs(Applicant applicant)
         {
             FillTextFields(applicant);
             SelectDropdownItems(applicant);
+            SelectCheckboxesAndRadioButtons(applicant);
         }
 
         public void SubmitApplication()
@@ -273,7 +274,6 @@ namespace CodeYouApplicationTests
             }
             _seleniumHelpers.SelectInputWithText(ComputerSkillRadioButtons,
                 applicant.ComputerSkillLevel.ToString());
-            SelectGovernmentAssistanceTypes(applicant);
         }
 
         private void SelectGovernmentAssistanceTypes(Applicant applicant)
@@ -301,11 +301,15 @@ namespace CodeYouApplicationTests
         private void FillOptionalFieldsAs(Applicant applicant)
         {
             PreferredNameTextbox.SendKeys(applicant.PreferredName);
-            _seleniumHelpers.SelectInputWithText(LGBTQDropdown,
+            _seleniumHelpers.SelectDropdownItemWithText(LGBTQDropdown,
                 BoolToYesNo(applicant.IdentifiesAsLGBTQ));
-            _seleniumHelpers.SelectInputWithText(FelonyConvictionDropdown,
+            _seleniumHelpers.SelectDropdownItemWithText(FelonyConvictionDropdown,
                 BoolToYesNo(applicant.FelonyConviction));
-            SelectCheckboxesAndRadioButtons(applicant);
+            if (applicant.QualifiesForGovernmentAssistance)
+            {
+                SelectGovernmentAssistanceTypes(applicant);
+            }
+
         }
 
         private static string BoolToYesNo(bool input)

@@ -33,7 +33,19 @@ namespace CodeYouApplicationTests
         {
             _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
 
-            _applyPage.FillRequiredFieldsAs(_applyPage.Applicants[2]);
+            _applyPage.FillRequiredFieldsAs(_applyPage.Applicants[0]);
+            _seleniumHelpers.ScrollToElement(_applyPage.AcknowledgementCheckbox);
+            _applyPage.AcknowledgementCheckbox.Click();
+
+            //_applyPage.SubmitApplication();
+        }
+        
+        [Test]
+        public void ApplicationForm_SubmitsWithoutError_WhenAllFieldsAreFilled()
+        {
+            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
+
+            _applyPage.FillAllFieldsAs(_applyPage.Applicants[2]);
             _seleniumHelpers.ScrollToElement(_applyPage.AcknowledgementCheckbox);
             _applyPage.AcknowledgementCheckbox.Click();
 

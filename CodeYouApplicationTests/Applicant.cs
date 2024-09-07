@@ -19,6 +19,8 @@
             EmploymentStatus = "Employed full-time";
             UnemploymentStatus = "Student";
             HighestEducationCompleted = "GED";
+            FelonyConviction = false;
+            IdentifiesAsLGBTQ = false;
 
         }
 

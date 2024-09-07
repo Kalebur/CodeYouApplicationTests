@@ -30,10 +30,10 @@ namespace CodeYouApplicationTests
         public void SelectInputWithText(IWebElement inputGroup, string text)
         {
             var inputItems = inputGroup.FindElements(By.XPath(".//child::span//label"));
-            ScrollToElement(inputGroup);
 
             foreach (var inputItem in inputItems)
             {
+                ScrollToElement(inputItem);
                 if (inputItem.Text == text) inputItem.Click();
             }
         }
