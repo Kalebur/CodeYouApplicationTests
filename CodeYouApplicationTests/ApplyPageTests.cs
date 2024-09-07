@@ -39,6 +39,7 @@ namespace CodeYouApplicationTests
             //_applyPage.AcknowledgementCheckbox.Click();
             _applyPage.SubmitApplication();
             var alertText = _driver.GetAlertText();
+            _driver.DismissAlert();
 
             Assert.That(alertText, Is.EqualTo(expectedErrorText));
         }
@@ -46,13 +47,17 @@ namespace CodeYouApplicationTests
         [Test]
         public void ApplicationForm_SubmitsWithoutError_WhenAllFieldsAreFilled()
         {
+            var expectedErrorText = _applyPage.GetExpectedFormSubmissionErrorAlertText(1);
+
             _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
-
             _applyPage.FillAllFieldsAs(_applyPage.Applicants[2]);
-            _seleniumHelpers.ScrollToElement(_applyPage.AcknowledgementCheckbox);
-            _applyPage.AcknowledgementCheckbox.Click();
+            //_seleniumHelpers.ScrollToElement(_applyPage.AcknowledgementCheckbox);
+            //_applyPage.AcknowledgementCheckbox.Click();
+            _applyPage.SubmitApplication();
+            var alertText = _driver.GetAlertText();
+            _driver.DismissAlert();
 
-            //_applyPage.SubmitApplication();
+            Assert.That(alertText, Is.EqualTo(expectedErrorText));
         }
 
         [TestCase("IN")]
@@ -100,6 +105,21 @@ namespace CodeYouApplicationTests
             }
 
             Assert.That(onlyValidStatesDisplayed, Is.True);
+        }
+
+        // Test Case 4
+        [Test]
+        public void ApplicationForm_FailsToSubmit_WhenFormIsBlank()
+        {
+            var errorAlertText = string.Empty;
+            var expectedErrorAlertText = _applyPage.GetExpectedFormSubmissionErrorAlertText(28);
+
+            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
+            _applyPage.SubmitApplication();
+            errorAlertText = _driver.GetAlertText();
+            _driver.DismissAlert();
+
+            Assert.That(errorAlertText, Is.EqualTo(expectedErrorAlertText));
         }
 
         [TearDown]
