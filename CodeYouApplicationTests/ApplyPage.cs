@@ -58,7 +58,7 @@ namespace CodeYouApplicationTests
         public IWebElement SubmitButton => _driver.FindElement(By.Id("submit_button"));
 
         // Error Selectors
-        public IWebElement BirthdateError => _driver.FindElement(By.Id("tfa_5-HH"));
+        public IWebElement BirthdateError => _driver.FindElement(By.Id("tfa_5-E"));
 
         // Expected Error Values
         public string GetExpectedFormSubmissionErrorAlertText(int expectedErrorCount)

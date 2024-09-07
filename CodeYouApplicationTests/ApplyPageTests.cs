@@ -122,6 +122,24 @@ namespace CodeYouApplicationTests
             Assert.That(errorAlertText, Is.EqualTo(expectedErrorAlertText));
         }
 
+        // Test Case 5
+        [TestCase("March 7th, 1996")]
+        [TestCase("HippityHoppityWubbaboos")]
+        [TestCase("8-8-88")]
+        [TestCase("08-18-1994")]
+        public void ApplicationForm_DisplaysInvalidDateFormatError_WhenSubmittingWithInvalidBirthdateFormat(string birthdate)
+        {
+            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
+            _seleniumHelpers.ScrollToElement(_applyPage.BirthDateTextbox);
+            _applyPage.BirthDateTextbox.SendKeys(birthdate);
+            _applyPage.SubmitApplication();
+            _driver.DismissAlert();
+            _seleniumHelpers.ScrollToElement(_applyPage.BirthdateError);
+            var errorText = _applyPage.BirthdateError.Text;
+
+            Assert.That(errorText, Is.EqualTo(_applyPage.ExpectedInvalidDateErrorText));
+        }
+
         [TearDown]
         public void Teardown()
         {
