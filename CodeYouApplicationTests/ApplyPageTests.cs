@@ -40,6 +40,30 @@ namespace CodeYouApplicationTests
             //_applyPage.SubmitApplication();
         }
 
+        [TestCase("IN")]
+        [TestCase("KY")]
+        [TestCase("OH")]
+        public void ApplicationForm_DisplaysOnlyCountiesInSelectedState(string state)
+        {
+            var hiddenAsExpected = true;
+            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
+            var hiddenCountyGroups = _applyPage.AllCountyGroups
+                .Where(group => group.GetAttribute("label") != state)
+                .ToList();
+
+            _seleniumHelpers.SelectDropdownItemWithText(_applyPage.StateDropdown, state);
+            foreach (var hiddenCountyGroup in hiddenCountyGroups)
+            {
+                if (!hiddenCountyGroup.GetAttribute("style").Contains("none"))
+                {
+                    hiddenAsExpected = false;
+                    break;
+                }
+            }
+
+            Assert.That(hiddenAsExpected, Is.True);
+        }
+
         [TearDown]
         public void Teardown()
         {

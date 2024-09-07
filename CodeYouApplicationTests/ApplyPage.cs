@@ -70,6 +70,7 @@ namespace CodeYouApplicationTests
         }
 
         public string ExpectedInvalidDateErrorText => "This does not appear to be a valid date.";
+        public List<IWebElement> AllCountyGroups => [KentuckyCountiesGroup, OhioCountiesGroup, IndianaCountiesGroup];
 
 
         public IList<Applicant> Applicants => [
