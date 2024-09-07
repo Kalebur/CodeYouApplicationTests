@@ -60,30 +60,6 @@ namespace CodeYouApplicationTests
             Assert.That(alertText, Is.EqualTo(expectedErrorText));
         }
 
-        [TestCase("IN")]
-        [TestCase("KY")]
-        [TestCase("OH")]
-        public void ApplicationForm_DisplaysOnlyCountiesInSelectedState(string state)
-        {
-            var onlyCountiesInStateDisplayed = true;
-            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
-            var hiddenCountyGroups = _applyPage.AllCountyGroups
-                .Where(group => group.GetAttribute("label") != state)
-                .ToList();
-
-            _seleniumHelpers.SelectDropdownItemByText(_applyPage.StateDropdown, state);
-            foreach (var hiddenCountyGroup in hiddenCountyGroups)
-            {
-                if (!hiddenCountyGroup.GetAttribute("style").Contains("none"))
-                {
-                    onlyCountiesInStateDisplayed = false;
-                    break;
-                }
-            }
-
-            Assert.That(onlyCountiesInStateDisplayed, Is.True);
-        }
-
         // Test Case 4
         [Test]
         public void ApplicationForm_FailsToSubmit_WhenFormIsBlank()
@@ -155,6 +131,50 @@ namespace CodeYouApplicationTests
             }
 
             Assert.That(onlyValidStatesDisplayed, Is.True);
+        }
+
+        // Test Case 8
+        [TestCase("IN")]
+        [TestCase("KY")]
+        [TestCase("OH")]
+        public void ApplicationForm_DisplaysOnlyCountiesInSelectedState(string state)
+        {
+            var onlyCountiesInStateDisplayed = true;
+            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
+            var hiddenCountyGroups = _applyPage.AllCountyGroups
+                .Where(group => group.GetAttribute("label") != state)
+                .ToList();
+
+            _seleniumHelpers.SelectDropdownItemByText(_applyPage.StateDropdown, state);
+            foreach (var hiddenCountyGroup in hiddenCountyGroups)
+            {
+                if (!hiddenCountyGroup.GetAttribute("style").Contains("none"))
+                {
+                    onlyCountiesInStateDisplayed = false;
+                    break;
+                }
+            }
+
+            Assert.That(onlyCountiesInStateDisplayed, Is.True);
+        }
+
+        // Test Case 9
+        [Test]
+        public void ComputerSkillsRadioButtons_OnlyAllowOneOptionToBeSelectedAtATime()
+        {
+            _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
+            _seleniumHelpers.ScrollToElement(_applyPage.ComputerSkillRadioButtons);
+            var radioButtons = _applyPage.ComputerSkillRadioButtons.FindElements(By.XPath(".//child::input"));
+
+            foreach (var radioButton in radioButtons)
+            {
+                radioButton.Click();
+            }
+
+            var selectedCount = _seleniumHelpers.GetCountOfSelectedElements(radioButtons);
+
+            Assert.That(selectedCount, Is.EqualTo(1));
+
         }
 
         [TearDown]

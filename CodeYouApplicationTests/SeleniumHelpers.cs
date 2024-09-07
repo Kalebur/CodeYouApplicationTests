@@ -40,5 +40,15 @@ namespace CodeYouApplicationTests
                 }
             }
         }
+
+        public void SelectElementByIndex(IList<IWebElement> elements, int index)
+        {
+            elements[index].Click();
+        }
+
+        public int GetCountOfSelectedElements(IList<IWebElement> elements)
+        {
+            return elements.Where(element => element.Selected).Count();
+        }
     }
 }
