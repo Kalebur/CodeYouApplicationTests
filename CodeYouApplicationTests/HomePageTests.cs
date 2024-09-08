@@ -22,7 +22,7 @@ namespace CodeYouApplicationTests
             _seleniumHelpers = new SeleniumHelpers(_driver, _actionsPerformer);
         }
 
-
+        // Test Case 3
         [Test]
         public void HomePage_ContainsLinkThat_RedirectsToApplyPage()
         {
