@@ -67,20 +67,19 @@ namespace CodeYouApplicationTests
         }
 
         // Test Case 6
-        // TODO: Rework this one. It's wonky at the moment
         [Test]
-        public void ApplicationForm_DisplaysCorrectError_WhenSubmittingBirthdateThatIsTooYoungOrTooOld()
+        public void ApplicationForm_DisplaysCorrectError_WhenSubmittingBirthdateThatIsTooYoung()
         {
-            var birthdate = ApplicantHelpers.GetRandomBirthDate(BirthdateType.Future);
+            var birthdate = ApplicantHelpers.GetRandomBirthDate(BirthdateType.Under18);
 
             _driver.Navigate().GoToUrl(_applyPage.ApplyPageUrl);
             _applyPage.BirthDateTextbox.SendKeys(birthdate.ToString("MM/dd/yyyy"));
             _applyPage.SubmitApplication();
             _driver.DismissAlert();
-            var expected = _applyPage.BirthdateError.Text;
+            var expected = _applyPage.GetTooYoungErrorAlertText();
             var errorText = _applyPage.BirthdateError.Text;
 
-            Assert.That(errorText, Is.EqualTo(expected));
+            Assert.That(errorText, Is.EqualTo(expected), $"Expected: {expected}, Got: {errorText}");
         }
 
         // Test Case 7

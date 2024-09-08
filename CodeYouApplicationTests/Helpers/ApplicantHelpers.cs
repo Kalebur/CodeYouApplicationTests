@@ -61,7 +61,7 @@ namespace CodeYouApplicationTests.Helpers
             {
                 BirthdateType.Valid => birthDate >= _oldestValidBirthdate && birthDate <= _youngestValidBirthdate,
                 BirthdateType.Future => birthDate > _currentDate,
-                BirthdateType.Under18 => birthDate > _youngestValidBirthdate && birthDate <= _currentDate,
+                BirthdateType.Under18 => birthDate > _youngestValidBirthdate && birthDate < _currentDate,
                 _ => birthDate < _oldestValidBirthdate,
             };
         }
