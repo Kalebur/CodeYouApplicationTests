@@ -2,7 +2,7 @@
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 
-namespace CodeYouApplicationTests
+namespace CodeYouApplicationTests.Helpers
 {
     public class SeleniumHelpers
     {

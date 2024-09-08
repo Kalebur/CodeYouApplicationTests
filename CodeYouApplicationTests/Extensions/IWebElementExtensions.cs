@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
 
-namespace CodeYouApplicationTests
+namespace CodeYouApplicationTests.Extensions
 {
     public static class IWebElementExtensions
     {

@@ -1,6 +1,8 @@
-﻿using OpenQA.Selenium;
+﻿using CodeYouApplicationTests.Data;
+using CodeYouApplicationTests.Helpers;
+using OpenQA.Selenium;
 
-namespace CodeYouApplicationTests
+namespace CodeYouApplicationTests.Selectors
 {
     public class ApplyPage
     {

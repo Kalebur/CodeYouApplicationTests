@@ -1,4 +1,4 @@
-﻿namespace CodeYouApplicationTests
+﻿namespace CodeYouApplicationTests.Data
 {
     public class Applicant
     {

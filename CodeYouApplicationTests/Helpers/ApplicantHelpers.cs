@@ -1,6 +1,7 @@
-﻿using Microsoft.VisualBasic;
+﻿using CodeYouApplicationTests.Data;
+using Microsoft.VisualBasic;
 
-namespace CodeYouApplicationTests
+namespace CodeYouApplicationTests.Helpers
 {
     public class ApplicantHelpers
     {
